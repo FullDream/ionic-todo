@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>{{ values ? "Edit" : "Create" }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onSubmit()">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-textarea
+        formControlName="text"
+        placeholder="Type something here"
+        [autoGrow]="true"
+      >
+      </ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">category</ion-label>
+      <ion-input formControlName="category" placeholder="Your name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Date</ion-label>
+
+      <ion-datetime
+        size="cover"
+        presentation="date"
+        formControlName="date"
+      ></ion-datetime>
+    </ion-item>
+  </form>
+</ion-content>

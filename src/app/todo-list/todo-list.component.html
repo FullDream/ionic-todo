@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title> Ionic To Do </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button expand="block" (click)="openModal()">
+    Add task
+    <ion-icon slot="end" name="add-outline"></ion-icon>
+  </ion-button>
+  <ion-list [inset]="true">
+    <ion-item
+      (click)="openModal(todo)"
+      button
+      *ngFor="let todo of items$ | async"
+    >
+      <ion-label>
+        <time>{{ todo.date | date: "dd.MM.YYYY" }}</time>
+        <h2>{{ todo.text }}</h2>
+        <span>{{ todo.category }}</span>
+      </ion-label>
+      <ion-button (click)="onDelete($event, todo)" slot="end" color="danger">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>
