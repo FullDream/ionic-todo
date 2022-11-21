@@ -64,6 +64,9 @@ yarn-error.log
 testem.log
 /typings
 
+/resources
+config.xml
+
 # System files
 .DS_Store
 Thumbs.db
