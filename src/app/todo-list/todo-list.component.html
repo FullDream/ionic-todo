@@ -10,13 +10,9 @@
     <ion-icon slot="end" name="add-outline"></ion-icon>
   </ion-button>
   <ion-list [inset]="true">
-    <ion-item
-      (click)="openModal(todo)"
-      button
-      *ngFor="let todo of items$ | async"
-    >
+    <ion-item (click)="openModal(todo)" button *ngFor="let todo of items">
       <ion-label>
-        <time>{{ todo.date | date: "dd.MM.YYYY" }}</time>
+        <time>{{ todo.date | date : "dd.MM.YYYY" }}</time>
         <h2>{{ todo.text }}</h2>
         <span>{{ todo.category }}</span>
       </ion-label>

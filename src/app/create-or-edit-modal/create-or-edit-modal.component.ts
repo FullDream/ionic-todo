@@ -10,6 +10,29 @@ import {
 import { Todo } from '@app/todo-list/todo.interface';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { FirebaseAbstract } from '@shared/abstractions';
+import { Apollo, gql } from 'apollo-angular';
+
+const CREATE_TODO = gql`
+  mutation CreateTodo($data: TodoCreateInput!) {
+    createTodo(data: $data) {
+      id
+      text
+      date
+      category
+    }
+  }
+`;
+
+const UPDATE_TODO = gql`
+  mutation UpdateTodo($id: ID, $data: TodoUpdateInput!) {
+    updateTodo(where: { id: $id }, data: $data) {
+      id
+      text
+      date
+      category
+    }
+  }
+`;
 
 @Component({
   selector: 'app-create-or-edit-modal',
@@ -21,16 +44,13 @@ export class CreateOrEditModalComponent implements OnInit {
   @Input() values: Record<string, any>;
 
   public form = new FormGroup({
-    id: new FormControl(''),
-    date: new FormControl(''),
+    id: new FormControl(null),
+    date: new FormControl(null),
     text: new FormControl('', { validators: Validators.required }),
     category: new FormControl('', { validators: Validators.required }),
   });
 
-  constructor(
-    private modalCtrl: ModalController,
-    private firebaseService: FirebaseAbstract<Todo>
-  ) {}
+  constructor(private modalCtrl: ModalController, private apollo: Apollo) {}
 
   ngOnInit() {
     this.form.patchValue(this.values);
@@ -41,13 +61,23 @@ export class CreateOrEditModalComponent implements OnInit {
   }
 
   public async onSubmit() {
-    const formValues = {
-      ...this.form.value,
-    } as Todo;
+    const { id, ...formValues } = Object.fromEntries(
+      Object.entries(this.form.value).filter(([_, v]) => v != null)
+    ) as any;
 
     !this.values
-      ? this.firebaseService.create(formValues)
-      : this.firebaseService.update(formValues.id as string, formValues);
+      ? this.apollo
+          .mutate({
+            mutation: CREATE_TODO,
+            variables: { data: formValues },
+          })
+          .subscribe((data) => console.log('create', data))
+      : this.apollo
+          .mutate({
+            mutation: UPDATE_TODO,
+            variables: { id, data: formValues },
+          })
+          .subscribe((data) => console.log('create', data));
     return this.modalCtrl.dismiss(formValues, 'confirm');
   }
 }

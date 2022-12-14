@@ -4,21 +4,42 @@ import { Todo } from '@app/todo-list/todo.interface';
 import { AlertController, ModalController } from '@ionic/angular';
 import { FirebaseAbstract } from '@shared/abstractions';
 import { Observable } from 'rxjs';
+import { Apollo, gql } from 'apollo-angular';
 
+const DELETE_TODO = gql`
+  mutation DeleteTodo($id: ID) {
+    deleteTodo(where: { id: $id }) {
+      id
+    }
+  }
+`;
 @Component({
   selector: 'app-todo-list',
   templateUrl: 'todo-list.component.html',
 })
 export class TodoListComponent implements OnInit {
-  public items$: Observable<Todo[]>;
+  public items: Todo[];
   constructor(
     private modalCtrl: ModalController,
     private alertController: AlertController,
-    private firebaseService: FirebaseAbstract<Todo>
+    private apollo: Apollo
   ) {}
 
   ngOnInit(): void {
-    this.items$ = this.firebaseService.getAll();
+    this.apollo
+      .watchQuery<any>({
+        query: gql`
+          {
+            todos {
+              text
+              id
+              category
+              date
+            }
+          }
+        `,
+      })
+      .valueChanges.subscribe(({ data }) => (this.items = data?.todos));
   }
 
   public async onDelete(event: Event, data: Todo): Promise<void> {
@@ -36,7 +57,9 @@ export class TodoListComponent implements OnInit {
           text: 'Delete',
           role: 'confirm',
           handler: () => {
-            this.firebaseService.delete(data.id);
+            this.apollo
+              .mutate({ mutation: DELETE_TODO, variables: { id: data.id } })
+              .subscribe(console.log);
           },
         },
       ],
