@@ -4,6 +4,7 @@ import { Todo } from '@app/todo-list/todo.interface';
 import { AlertController, ModalController } from '@ionic/angular';
 import { FirebaseAbstract } from '@shared/abstractions';
 import { Observable } from 'rxjs';
+import { SanityService } from '../sanity.service';
 
 @Component({
   selector: 'app-todo-list',
@@ -14,11 +15,12 @@ export class TodoListComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private alertController: AlertController,
-    private firebaseService: FirebaseAbstract<Todo>
+    // private firebaseService: FirebaseAbstract<Todo>,
+    public readonly sanityService: SanityService
   ) {}
 
   ngOnInit(): void {
-    this.items$ = this.firebaseService.getAll();
+    this.items$ = this.sanityService.getAll();
   }
 
   public async onDelete(event: Event, data: Todo): Promise<void> {
@@ -36,7 +38,7 @@ export class TodoListComponent implements OnInit {
           text: 'Delete',
           role: 'confirm',
           handler: () => {
-            this.firebaseService.delete(data.id);
+            this.sanityService.delete(data._id);
           },
         },
       ],

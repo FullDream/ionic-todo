@@ -10,6 +10,7 @@ import {
 import { Todo } from '@app/todo-list/todo.interface';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { FirebaseAbstract } from '@shared/abstractions';
+import { SanityService } from '../sanity.service';
 
 @Component({
   selector: 'app-create-or-edit-modal',
@@ -21,7 +22,7 @@ export class CreateOrEditModalComponent implements OnInit {
   @Input() values: Record<string, any>;
 
   public form = new FormGroup({
-    id: new FormControl(''),
+    _id: new FormControl(''),
     date: new FormControl(''),
     text: new FormControl('', { validators: Validators.required }),
     category: new FormControl('', { validators: Validators.required }),
@@ -29,7 +30,8 @@ export class CreateOrEditModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private firebaseService: FirebaseAbstract<Todo>
+    // private firebaseService: FirebaseAbstract<Todo>,
+    public readonly sanityService: SanityService
   ) {}
 
   ngOnInit() {
@@ -46,8 +48,8 @@ export class CreateOrEditModalComponent implements OnInit {
     } as Todo;
 
     !this.values
-      ? this.firebaseService.create(formValues)
-      : this.firebaseService.update(formValues.id as string, formValues);
+      ? this.sanityService.create(formValues).subscribe()
+      : this.sanityService.update(formValues).subscribe();
     return this.modalCtrl.dismiss(formValues, 'confirm');
   }
 }
