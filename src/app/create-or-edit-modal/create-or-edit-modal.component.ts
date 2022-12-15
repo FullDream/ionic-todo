@@ -10,6 +10,7 @@ import {
 import { Todo } from '@app/todo-list/todo.interface';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { FirebaseAbstract } from '@shared/abstractions';
+import { DirectusService } from '../directus.service';
 
 @Component({
   selector: 'app-create-or-edit-modal',
@@ -29,7 +30,8 @@ export class CreateOrEditModalComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private firebaseService: FirebaseAbstract<Todo>
+    private firebaseService: FirebaseAbstract<Todo>,
+    public directusService: DirectusService
   ) {}
 
   ngOnInit() {
@@ -46,8 +48,8 @@ export class CreateOrEditModalComponent implements OnInit {
     } as Todo;
 
     !this.values
-      ? this.firebaseService.create(formValues)
-      : this.firebaseService.update(formValues.id as string, formValues);
+      ? this.directusService.create(formValues).subscribe()
+      : this.directusService.update(formValues).subscribe();
     return this.modalCtrl.dismiss(formValues, 'confirm');
   }
 }

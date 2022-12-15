@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Ionic To Do </ion-title>
+    <ion-title> Directus cms </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -16,7 +16,7 @@
       *ngFor="let todo of items$ | async"
     >
       <ion-label>
-        <time>{{ todo.date | date: "dd.MM.YYYY" }}</time>
+        <time>{{ todo.date | date : "dd.MM.YYYY" }}</time>
         <h2>{{ todo.text }}</h2>
         <span>{{ todo.category }}</span>
       </ion-label>
