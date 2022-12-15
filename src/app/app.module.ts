@@ -10,7 +10,7 @@ import { environment } from '../environments/environment';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { HttpClientModule } from '@angular/common/http';
-import { DirectusService } from './directus.service';
+import { StrapiService } from './strapi.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +24,7 @@ import { DirectusService } from './directus.service';
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    DirectusService,
+    StrapiService,
   ],
   bootstrap: [AppComponent],
 })

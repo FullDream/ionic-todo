@@ -10,7 +10,7 @@ import {
 import { Todo } from '@app/todo-list/todo.interface';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { FirebaseAbstract } from '@shared/abstractions';
-import { DirectusService } from '../directus.service';
+import { StrapiService } from '../strapi.service';
 
 @Component({
   selector: 'app-create-or-edit-modal',
@@ -31,7 +31,7 @@ export class CreateOrEditModalComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private firebaseService: FirebaseAbstract<Todo>,
-    public directusService: DirectusService
+    public directusService: StrapiService
   ) {}
 
   ngOnInit() {

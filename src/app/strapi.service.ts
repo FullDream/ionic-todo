@@ -5,8 +5,8 @@ import { tap, map } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class DirectusService {
-  URL = 'https://abrbohea.directus.app/items/todos';
+export class StrapiService {
+  URL = 'api/todos';
 
   constructor(private readonly httpClient: HttpClient) {}
 
@@ -16,12 +16,14 @@ export class DirectusService {
       .pipe(map((res) => res.data));
   }
 
-  create({ text, category }: Todo) {
-    return this.httpClient.post(this.URL, { text, category });
+  create({ text, category, date }: Todo) {
+    return this.httpClient.post(this.URL, { data: { text, category, date } });
   }
 
-  update({ text, category, id }: Todo) {
-    return this.httpClient.patch(this.URL + '/' + id, { text, category });
+  update({ text, category, id, date }: Todo) {
+    return this.httpClient.patch(this.URL + '/' + id, {
+      data: { text, category, date },
+    });
   }
 
   delete(id: any) {
